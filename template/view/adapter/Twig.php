@@ -70,27 +70,4 @@ class Twig extends Renderer
         //an substitute.
         return $template->render((array) $data + array('view' => $this));
     }
-    
-    /**
-     * Returns the paths
-     *
-     * @param mixed $type
-     * @param array $options
-     * @return mixed
-     */
-    public function template($type, $options = array())
-    {
-        if (!isset($this->_config['paths'][$type])) {
-            return null;    
-        }
-        
-        $options['library'] = isset($options['library']) ? $options['library'] : 'app';
-        $library = Libraries::get($options['library']);
-        $options['library'] = $library['path'];
-        
-        
-        return array_map(function ($item) use ($options) {
-            return String::insert($item, $options);
-        }, (array) $this->_config['paths'][$type]);
-    }
 }

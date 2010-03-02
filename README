@@ -1,0 +1,25 @@
+li3_twig
+========
+Enables Twig support for Lithium PHP Framework.
+
+Usage
+-----
+First enable the plugin with 
+
+> Libraries::add('plugin', 'li3_twig');
+
+in `app/config/bootstrap/libraries.php`
+
+And then overwrite the default handler with:
+
+> lithium\net\http\Media::type('default', null, array(
+>     'view' => '\lithium\template\View',
+>     'loader' => 'li3_twig\template\Loader',
+>     'renderer' => 'li3_twig\template\view\adapter\Twig',
+>     'paths' => array(
+>         'template' => '{:library}/views/{:controller}/{:template}.{:type}',
+>         'layout'   => '{:library}/views/layouts/{:layout}.{:type}',
+>     ),
+> ));
+
+in `app/config/bootstrap.php`.
