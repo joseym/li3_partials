@@ -8,15 +8,13 @@
 
 namespace li3_twig\template\view\adapter;
 
-use \lithium\template\view\Renderer;
-
 /**
  * View adapter for Twig templating. http://twig-project.org
  *
  * @see lithium\template\view\Renderer
  */
 
-class Twig extends Renderer
+class Twig extends \lithium\template\view\Renderer
 {
     /**
      * @var Twig_Environment
@@ -33,14 +31,15 @@ class Twig extends Renderer
     {
         parent::__construct($config);
         
-        Libraries::add('Twig', array(
+        \lithium\core\Libraries::add('Twig', array(
             'path' => realpath(__DIR__ . '/../../../libraries/Twig/lib/Twig'),
             'prefix' => 'Twig_',
             'loader' => 'Twig_Autoloader::autoload',
         ));
         
         $this->_environment = new \Twig_Environment(new \Twig_Loader_Filesystem(array()), array(
-            'cache' => LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
+            'cache' => null,//LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
+            'debug' => true,
             'auto_reloader' => true,
         ));
     }   
@@ -55,6 +54,8 @@ class Twig extends Renderer
      */
     public function render($paths, $data = array(), $options = array())
     {
+        $this->_context = $options['context'] + $this->_context;
+        
         $directories = array_map(function ($item) {
             return dirname($item);
         }, $paths);
@@ -66,6 +67,6 @@ class Twig extends Renderer
            
         //Because $this is not availible in the Twig template view is used as
         //an substitute.
-        return $template->render((array) $data + array('view' => $this));
+        return $template->render((array) $data + array('this' => $this));
     }
 }
