@@ -42,7 +42,7 @@ class Twig extends Renderer
         ));
         
         $this->_environment = new \Twig_Environment(new \Twig_Loader_Filesystem(array()), array(
-            'cache' => false,//LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
+            'cache' => LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
             'auto_reloader' => true,
         ));
     }   
