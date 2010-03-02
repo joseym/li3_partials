@@ -8,9 +8,7 @@
 
 namespace li3_twig\template\view\adapter;
 
-use \lithium\util\String;
 use \lithium\template\view\Renderer;
-use \lithium\core\Libraries;
 
 /**
  * View adapter for Twig templating. http://twig-project.org
