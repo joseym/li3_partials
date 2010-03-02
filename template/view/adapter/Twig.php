@@ -45,7 +45,7 @@ class Twig extends \lithium\template\view\Renderer
         $this->_loader = new Twig_Loader_Filesystem(array());
         
         $this->_environment = new Twig_Environment($this->_loader, array(
-            'cache' => LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
+            'cache' => false, //LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
             'auto_reloader' => true,
         ));
     }   
@@ -59,12 +59,7 @@ class Twig extends \lithium\template\view\Renderer
      * @return string
      */
     public function render($template, $data = array(), $options = array())
-    {
-        print '<pre>';
-        print_r(func_get_args());
-        print '</pre>';
-        die;
-        
+    {   
         //Loading template.. Will look in all the paths.
         $template = $this->_environment->loadTemplate($template);
         
@@ -89,10 +84,5 @@ class Twig extends \lithium\template\view\Renderer
         
         //maybe need to be reversed to keep the loader priorities.
         $this->_loader->setPaths((array) $this->_config['paths'][$type]);
-        
-        print '<pre>';
-        print_r(func_get_args());
-        print '</pre>';
-        die;
     }
 }
