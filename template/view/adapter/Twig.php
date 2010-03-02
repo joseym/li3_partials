@@ -8,23 +8,22 @@
 
 namespace li3_twig\template\view\adapter;
 
+use \lithium\util\String;
+use \lithium\template\view\Renderer;
+use \lithium\core\Libraries;
+
 /**
  * View adapter for Twig templating. http://twig-project.org
  *
  * @see lithium\template\view\Renderer
  */
 
-class Twig extends \lithium\template\view\Renderer
+class Twig extends Renderer
 {
     /**
      * @var Twig_Environment
      */
-    protected $_environment = null;
-    
-    /**
-     * @var Twig_Loader
-     */
-    protected $_loader = null;
+    public $_environment = null;
     
     /**
      * Sets up the necesarry libraries and autoloaders for this view adapter
@@ -36,16 +35,14 @@ class Twig extends \lithium\template\view\Renderer
     {
         parent::__construct($config);
         
-        \lithium\core\Libraries::add('Twig', array(
+        Libraries::add('Twig', array(
             'path' => realpath(__DIR__ . '/../../../libraries/Twig/lib/Twig'),
             'prefix' => 'Twig_',
             'loader' => 'Twig_Autoloader::autoload',
         ));
         
-        $this->_loader = new Twig_Loader_Filesystem(array());
-        
-        $this->_environment = new Twig_Environment($this->_loader, array(
-            'cache' => false, //LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
+        $this->_environment = new \Twig_Environment(new \Twig_Loader_Filesystem(array()), array(
+            'cache' => false,//LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
             'auto_reloader' => true,
         ));
     }   
@@ -53,24 +50,29 @@ class Twig extends \lithium\template\view\Renderer
     /**
      * Renders a template
      *
-     * @param mixed $template
+     * @param mixed $paths
      * @param array $data
      * @param array $options
      * @return string
      */
-    public function render($template, $data = array(), $options = array())
-    {   
-        //Loading template.. Will look in all the paths.
-        $template = $this->_environment->loadTemplate($template);
+    public function render($paths, $data = array(), $options = array())
+    {
+        $directories = array_map(function ($item) {
+            return dirname($item);
+        }, $paths);
         
+        $this->_environment->getLoader()->setPaths($directories);
+    
+        //Loading template.. Will look in all the paths.
+        $template = $this->_environment->loadTemplate(basename($paths[0]));
+           
         //Because $this is not availible in the Twig template view is used as
         //an substitute.
         return $template->render((array) $data + array('view' => $this));
     }
     
     /**
-     * Returns the basename of a template so it can be used with Twig Loader
-     * and since the twig loader takes paths we wont do a file_exists on it.
+     * Returns the paths
      *
      * @param mixed $type
      * @param array $options
@@ -82,7 +84,13 @@ class Twig extends \lithium\template\view\Renderer
             return null;    
         }
         
-        //maybe need to be reversed to keep the loader priorities.
-        $this->_loader->setPaths((array) $this->_config['paths'][$type]);
+        $options['library'] = isset($options['library']) ? $options['library'] : 'app';
+        $library = Libraries::get($options['library']);
+        $options['library'] = $library['path'];
+        
+        
+        return array_map(function ($item) use ($options) {
+            return String::insert($item, $options);
+        }, (array) $this->_config['paths'][$type]);
     }
 }
