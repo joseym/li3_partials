@@ -35,7 +35,6 @@ class Loader extends Object {
 		$library = Libraries::get($options['library']);
 		$options['library'] = $library['path'];
 
-
 		return array_map(function ($item) use ($options) {
 			return String::insert($item, $options);
 		}, (array) $this->_config['paths'][$type]);

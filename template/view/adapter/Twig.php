@@ -58,7 +58,7 @@ class Twig extends \lithium\template\view\Renderer {
 	 * @param array $options
 	 * @return string
 	 */
-	public function render($paths, $data = array(), $options = array()) {
+	public function render($paths, $data = array(), array $options = array()) {
 		$this->_context = $options['context'] + $this->_context;
 
 		$directories = array_map(function ($item) {
@@ -70,8 +70,7 @@ class Twig extends \lithium\template\view\Renderer {
 		//Loading template.. Will look in all the paths.
 		$template = $this->_environment->loadTemplate(basename($paths[0]));
 
-		//Because $this is not availible in the Twig template view is used as
-		//an substitute.
+		//Because $this is not availible in the Twig template view is used as a substitute.
 		return $template->render((array) $data + array('this' => $this));
 	}
 }
