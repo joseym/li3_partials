@@ -36,7 +36,7 @@ class Twig extends \lithium\template\view\Renderer {
 	 *        available configuration keys and their description.
 	 * @return void
 	 */
-    public function __construct($config = array()) {
+    public function __construct(array $config = array()) {
 		$defaults = array(
 			'cache' => LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
 		);
