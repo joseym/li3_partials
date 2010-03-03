@@ -62,7 +62,7 @@ class Twig extends \lithium\template\view\Renderer {
 	 * @param array $options
 	 * @return string
 	 */
-	public function render($paths, $data = array(), array $options = array()) {
+	public function render($paths, $data = array(), $options = array()) {
 		$this->_context = $options['context'] + $this->_context;
 
 		$directories = array_map(function ($item) {
