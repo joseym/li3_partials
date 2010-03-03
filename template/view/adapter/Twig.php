@@ -25,29 +25,33 @@ class Twig extends \lithium\template\view\Renderer {
 	 *
 	 * @var object
 	 */
-	protected $_environment = null;
+	public $environment = null;
 
 	/**
-	 * Sets up the necesarry libraries and autoloaders for this view adapter.
+	 * Constructor for this adapter - sets relevant default configurations for Twig to be used
+	 * when instantiating a new Twig_Environment and Twig_Loader_Filesystem.
 	 *
-	 * @param array $config
+	 * @param array $config Optional configuration directives.
+	 *        Please see http://www.twig-project.org/book/03-Twig-for-Developers for all
+	 *        available configuration keys and their description.
 	 * @return void
 	 */
     public function __construct($config = array()) {
-		$config += array('cache' => null, 'debug' => true, 'auto_reloader' => true);
-		parent::__construct($config);
+		$defaults = array(
+			'cache' => LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
+		);
+		parent::__construct($config + $defaults);
+	}
 
-		Libraries::add('Twig', array(
-			'path' => realpath(__DIR__ . '/../../../libraries/Twig/lib/Twig'),
-			'prefix' => 'Twig_',
-			'loader' => 'Twig_Autoloader::autoload',
-		));
-
-		$this->_environment = new Twig_Environment(new Twig_Loader_Filesystem(array()), array(
-			'cache' => null,//LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
-			'debug' => true,
-			'auto_reloader' => true,
-		));
+	/**
+	 * Initialize the necessary Twig objects & attach them to the current object instance.
+	 *
+	 * @return void
+	 */
+	public function _init() {
+		parent::_init();
+		$Loader = new Twig_Loader_Filesystem(array());
+		$this->environment = new Twig_Environment($Loader, $this->_config);
 	}
 
 	/**
@@ -65,10 +69,10 @@ class Twig extends \lithium\template\view\Renderer {
 			return dirname($item);
 		}, $paths);
 
-		$this->_environment->getLoader()->setPaths($directories);
+		$this->environment->getLoader()->setPaths($directories);
 
 		//Loading template.. Will look in all the paths.
-		$template = $this->_environment->loadTemplate(basename($paths[0]));
+		$template = $this->environment->loadTemplate(basename($paths[0]));
 
 		//Because $this is not availible in the Twig template view is used as a substitute.
 		return $template->render((array) $data + array('this' => $this));
