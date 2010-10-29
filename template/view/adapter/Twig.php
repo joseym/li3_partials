@@ -9,6 +9,7 @@
 namespace li3_twig\template\view\adapter;
 
 use \lithium\core\Libraries;
+use \lithium\core\Environment;
 use \Twig_Environment;
 use \Twig_Loader_Filesystem;
 
@@ -39,6 +40,7 @@ class Twig extends \lithium\template\view\Renderer {
     public function __construct(array $config = array()) {
 		$defaults = array(
 			'cache' => LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
+			'auto_reload' => (!Environment::is('production'))
 		);
 		parent::__construct($config + $defaults);
 	}
