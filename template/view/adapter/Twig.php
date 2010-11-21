@@ -12,9 +12,17 @@ use \lithium\core\Libraries;
 use \lithium\core\Environment;
 use \Twig_Environment;
 use \Twig_Loader_Filesystem;
+use \li3_twig\template\view\adapter\Template;
 
 /**
  * View adapter for Twig templating.
+ * Using helpers works like in normal li3 templates
+ * {{{
+ * {{ this.form.create }}
+ * {{ this.form.text('title') }}
+ * {{ this.form.select('gender', ['m':'male','f':'female']) }}
+ * {{ this.form.end }}
+ * }}}
  *
  * @see http://twig-project.org
  * @see lithium\template\view\Renderer
@@ -40,7 +48,8 @@ class Twig extends \lithium\template\view\Renderer {
     public function __construct(array $config = array()) {
 		$defaults = array(
 			'cache' => LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
-			'auto_reload' => (!Environment::is('production'))
+            'auto_reload' => (!Environment::is('production')),
+            'base_template_class' => '\li3_twig\template\view\adapter\Template'
 		);
 		parent::__construct($config + $defaults);
 	}
