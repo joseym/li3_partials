@@ -12,6 +12,7 @@ use RuntimeException;
 use \lithium\core\Libraries;
 use \Twig_Environment;
 use \Twig_Loader_Filesystem;
+use \Twig_Node_Expression_GetAttr;
 
 /**
  * Template class for rendering Twig templates
