@@ -30,7 +30,7 @@ abstract class Template extends \Twig_Template {
         if ($result === null) {
             // Fetch the helper object and return it
             try {
-                $result = $object->helper($item);
+                $result = (is_object($object)) ? $object->helper($item) : null;
             }
             catch (\Exception $e) {
                 $result = null;
