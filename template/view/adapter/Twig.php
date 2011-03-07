@@ -49,7 +49,8 @@ class Twig extends \lithium\template\view\Renderer {
 		$defaults = array(
 			'cache' => LITHIUM_APP_PATH . '/resources/tmp/cache/templates',
             'auto_reload' => (!Environment::is('production')),
-            'base_template_class' => '\li3_twig\template\view\adapter\Template'
+            'base_template_class' => '\li3_twig\template\view\adapter\Template',
+            'autoescape' => false
 		);
 		parent::__construct($config + $defaults);
 	}
