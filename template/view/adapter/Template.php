@@ -25,8 +25,9 @@ abstract class Template extends \Twig_Template {
      * Override the getAttribute to handle lazy loaded li3 helpers
      */
     protected function getAttribute($object, $item, array $arguments = array(), 
-                                    $type = Twig_Node_Expression_GetAttr::TYPE_ANY) {
-        $result = parent::getAttribute($object, $item, $arguments, $type);
+                                    $type = Twig_Node_Expression_GetAttr::TYPE_ANY, 
+                                    $noStrictCheck = false, $line = -1) {
+        $result = parent::getAttribute($object, $item, $arguments, $type, $noStrictCheck, $line);
         if ($result === null) {
             // Fetch the helper object and return it
             try {
