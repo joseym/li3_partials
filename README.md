@@ -27,7 +27,7 @@ There are 2 ways to print a blocked partial in your view
 
 	2. Call a partial block and pass the partials name
 	
-```		
+```	php	
 <?php echo $this->partial->block('sidebar');?>
 ```
 
