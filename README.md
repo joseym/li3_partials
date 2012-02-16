@@ -13,7 +13,7 @@ Plugin to pass template sections from view to the layout.
 ## Usage
 __Blocks__
 
-* In your view
+* ### In your view
 wrap the markup you want passed to the layout in `<partial></partial>` tags with a `name` attribute.
 
 		<partial name="sidebar"><h2>Sidebar for this view!</h2></partial>
