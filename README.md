@@ -97,4 +97,3 @@ __Blocks__
 1. I plan on adding enhanced cache features to this so the rendering engine isn't constantly parsing templates for partials
 2. Dynamic partials - support for a data schema to auto load partials from a database.
 3. Drink a beer. Why not?
-```
