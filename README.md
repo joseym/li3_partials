@@ -27,8 +27,8 @@ There are 2 ways to print a blocked partial in your view
 
 	2. Call a partial block and pass the partials name
 	
-		```		
-		<?php echo $this->partial->block('sidebar');?>
-		```
+```		
+<?php echo $this->partial->block('sidebar');?>
+```
 
 Anywhere that you decide to place either of those will render the partial that was defined in your view.
