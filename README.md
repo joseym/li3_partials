@@ -91,6 +91,7 @@ __Blocks__
 ```php
 <?php echo $this->partial->block('methodName'); ?>
 <?php echo $this->partial->methodName(array('type' => 'block')); ?>
+```
 
 # To come
 1. I plan on adding enhanced cache features to this so the rendering engine isn't constantly parsing templates for partials
