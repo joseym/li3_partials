@@ -6,7 +6,7 @@
  * @license       http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace li3_twig\template;
+namespace li3_partials\template;
 
 use \lithium\util\String;
 use \lithium\core\Libraries;
