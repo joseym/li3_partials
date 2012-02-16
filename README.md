@@ -64,3 +64,36 @@ Ok, so we defined keywords for our view! lets add them to the meta tag
 	<meta name="keywords" content="<?php echo $this->partial->keywords(); ?>" />
 	```
 	The plugin will find the stored keywords partial and render its contents where it was called.
+
+There is also a wrapper to ensure you only pull strings - much like blocks
+
+``` php
+<?php echo $this->partial->string('keyword'); ?>
+```
+
+"That's foolish, it's easier just to use the other method!" you exclaim.
+Hold tight, Fredword! I'll explain why you might want to do this below.
+
+## Sharing Names
+
+There may be a case where you define both a partial string and partial block with the same name.
+To ensure that you pull the right one thee are 2 methods for each (actually 3 for .
+
+__Strings__
+
+```php
+<?php echo $this->partial->string('methodName'); ?>
+<?php echo $this->partial->methodName(array('type' => 'string')); ?>
+```
+
+__Blocks__
+
+```php
+<?php echo $this->partial->block('methodName'); ?>
+<?php echo $this->partial->methodName(array('type' => 'block')); ?>
+
+# To come
+1. I plan on adding enhanced cache features to this so the rendering engine isn't constantly parsing templates for partials
+2. Dynamic partials - support for a data schema to auto load partials from a database.
+3. Drink a beer. Why not?
+```
