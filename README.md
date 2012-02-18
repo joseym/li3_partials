@@ -10,6 +10,10 @@ Plugin to pass template sections from view to the layout.
 ## Features
 1. Assign strings or entire blocks of markup to a partial.
 
+## Notice
+This plugin is still in early development and bugs are bound to turn up.
+Currently it does not play nicely with elements - this annoys me, I'm working on it.
+
 ## Usage
 __Blocks__
 
@@ -71,7 +75,7 @@ There is also a wrapper to ensure you only pull strings - much like blocks
 <?php echo $this->partial->string('keyword'); ?>
 ```
 
-"That's foolish, it's easier just to use the other method!" you exclaim.
+_"That's foolish, it's easier just to use the other method!"_ you exclaim.
 Hold tight, Fredword! I'll explain why you might want to do this below.
 
 ## Sharing Names
