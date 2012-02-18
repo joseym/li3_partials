@@ -50,8 +50,8 @@ class Partial extends \lithium\template\Helper {
 
 			if($isString){
 				return $strings[$method];
-		//	} elseif ($isBlock) {
-			//	return $spaces['block'][$method];
+			} elseif ($isBlock) {
+				return $spaces['block'][$method];
 			} else {
 				return false;
 			}
