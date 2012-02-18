@@ -11,7 +11,8 @@ namespace li3_partials\template\view\adapter;
 use \lithium\core\Libraries;
 use \lithium\core\Environment;
 
-class Parser extends \lithium\template\view\Renderer {
+// class Parser extends \lithium\template\view\Renderer {
+class Parser extends \lithium\template\view\adapter\File {
 
 	/**
 	 * 
@@ -40,51 +41,55 @@ class Parser extends \lithium\template\view\Renderer {
 	}
 
 	/**
-	 * Renders a template
+	 * Renders content from a template file provided by `template()`.
 	 *
-	 * @param mixed $paths
-	 * @param array $data
+	 * @param string $template
+	 * @param array|string $data
 	 * @param array $options
 	 * @return string
 	 */
-	public function render($paths, $data = array(), array $options = array()) {
+	public function render($template, $data = array(), array $options = array()) {
 
-		$stats = stat($paths[0]);
-
-		$cache_name = 'template_' . basename(implode('_', array_slice(explode('/', $paths[0]), 3)), '.php') . "_{$stats['ino']}_{$stats['mtime']}_{$stats['size']}.php";
-
+		$defaults = array('context' => array());
+		$options += $defaults;
 		$this->_context += $options['context'];
+		$this->_data = (array) $data + $this->_vars;
+		$template__ = $template[0];
+		unset($options, $template, $defaults, $data);
 
-		$directories = array_map(function ($item) {
-			return dirname($item);
-		}, $paths);
+		if ($this->_config['extract']) {
+			extract($this->_data, EXTR_OVERWRITE);
+		} elseif ($this->_view) {
+			extract((array) $this->_view->outputFilters, EXTR_OVERWRITE);
+		}
 
 		ob_start();
+		include $template__;
+		$content = ob_get_clean();
 
-		// load the template
-		include $paths[0];
-
-		// Store template contents
-		$contents = ob_get_clean();
-
-		// Catch template blocks
-		if((array_pop(explode("/", $directories[0])) != 'layout') AND preg_match( "/<(partial) name=\"([a-zA-Z 0-9]+)\">(.*)<\/\\1>/", $contents, $matches )){
+		if((array_pop(explode("/", $template__)) != 'layout') AND preg_match( "/<(partial) name=\"([a-zA-Z 0-9]+)\">(.*)<\/\\1>/", $content, $matches )){
 
 			// strip out the thing
-			$contents = str_replace($matches[0], "", $contents);
+			$content = str_replace($matches[0], "", $content);
 
 			// assign to context
 			$this->_context['Partials']['blocks'][$matches[2]] = $matches[3];
-
-			// Assign the cleaned view to the content context
-			$this->content($contents);
-
 		}
 
-		return $contents;
+		$this->content($content);
+		return $content;
 
 	}
 
+	/**
+	 * Currently useless method that is intended to write the results of a 
+	 * template containing a partial to cache so it doesn't have to parse it 
+	 * every time it loads.
+	 * 
+	 * @param  string $contents blob of markup to be stored
+	 * @param  array  $params
+	 * @return string
+	 */
 	private function _storeCache($contents, array $params = array()){
 
 		$filename = basename($file);
