@@ -1,6 +1,10 @@
 # Partial Template support for [li3](http://lithify.me)
 Plugin to pass template sections from view to the layout.
 
+## Notice
+This plugin is still in early development and bugs are bound to turn up.
+Currently it does not play nicely with elements - this annoys me, I'm working on it.
+
 ## Installation
 1. Clone/Download the plugin into your app's ``libraries`` directory.
 2. Tell your app to load the plugin by adding the following to your app's ``config/bootstrap/libraries.php``:
@@ -9,10 +13,6 @@ Plugin to pass template sections from view to the layout.
 
 ## Features
 1. Assign strings or entire blocks of markup to a partial.
-
-## Notice
-This plugin is still in early development and bugs are bound to turn up.
-Currently it does not play nicely with elements - this annoys me, I'm working on it.
 
 ## Usage
 __Blocks__
