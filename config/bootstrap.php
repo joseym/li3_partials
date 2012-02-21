@@ -12,10 +12,12 @@ define('CMS_PATH', dirname(__DIR__));
  */
 Media::type('default', null, array(
 	'view' => '\lithium\template\View',
-	'loader' => '\li3_partials\template\Loader',
 	'renderer' => '\li3_partials\template\view\adapter\Parser',
 	'paths' => array(
-		'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
+		'template' => array(
+			'{:library}/views/{:controller}/{:template}.{:type}.php',
+			LITHIUM_APP_PATH . '/views/{:controller}/{:template}.{:type}.php'
+		),
 		'layout' => '{:library}/views/layouts/{:layout}.{:type}.php'
 	)
 ));
