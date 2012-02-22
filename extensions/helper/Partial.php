@@ -27,31 +27,22 @@ class Partial extends \lithium\template\Helper {
 
 		$context = $this->_context->context();
 		$_strings = $this->_context->strings();
-		$strings = isset($_strings['Partial']) ? $_strings['Partial'] : false;
-
-		// ensure the context is available
-		if(!isset($context['Partials']['strings'])) $context['Partials']['strings'] = array();
-		if(!isset($context['Partials']['blocks'])) $context['Partials']['blocks'] = array();
-
-		$spaces = array(
-			'block' => $context['Partials']['blocks']
-		);
+		$strings = isset($_strings['Partials']['strings']) ? $_strings['Partials']['strings'] : false;
+		$blocks = isset($_strings['Partials']['blocks']) ? $_strings['Partials']['blocks'] : false;
 
 		if(!empty($args) AND is_string($args[0])){
 
 			self::_setString($method, $args[0]);
 
-			print_r($strings[$method]);
-
 		} else {
-
+			
 			$isString = ((isset($args[0]) AND $args[0]['type'] == 'string') OR empty($args)) ? true : false;
 			$isBlock = (!$isString) ? true : false;
 
 			if($isString){
-				return $strings[$method];
+				return (isset($strings[$method])) ? $strings[$method] : false;
 			} elseif ($isBlock) {
-				return $spaces['block'][$method];
+				return (isset($blocks[$method])) ? $blocks[$method] : false;
 			} else {
 				return false;
 			}
@@ -62,7 +53,7 @@ class Partial extends \lithium\template\Helper {
 	}
 
 	private function _setString($method, $value){
-		$strings['Partial'][$method] = $value;
+		$strings['Partials']['strings'][$method] = $value;
 		return $this->_context->strings($strings);
 
 	}

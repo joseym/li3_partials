@@ -8,6 +8,7 @@
 
 namespace li3_partials\template\view\adapter;
 
+use lithium\template\Helper;
 use \lithium\core\Libraries;
 use \lithium\core\Environment;
 use lithium\util\String;
@@ -18,14 +19,24 @@ class Parser extends \lithium\template\view\adapter\File {
 
 
 	/**
-	 * Renders content from a template file provided by `template()`.
+	 * Parses the template for block partials and adds them to the core _context array.
+	 * Everything contained within the `<partial />` tag will be added to the context
+	 * 
+	 * {{{
+	 * 	<partial name="sidebar"><h2>Sidebar for this view!</h2></partial>
+	 * }}}
 	 *
+	 * @see lithium\template\view\adapter\File::render()
 	 * @param string $template
 	 * @param array|string $data
 	 * @param array $options
 	 * @return string
 	 */
 	public function render($template, $data = array(), array $options = array()) {
+
+		echo "<pre>";
+		print_r($this->_strings['Partials']['blocks']);
+		echo "</pre>";
 
 		$defaults = array('context' => array());
 		$options += $defaults;
@@ -44,26 +55,35 @@ class Parser extends \lithium\template\view\adapter\File {
 		ob_start();
 		include $template__;
 		$content = ob_get_clean();
+		
+		$blocks = array();
 
 		// Exclude layouts and elements for now
 		// we will only look for partial blocks from views
 		if(($flipped_path[1] != 'layouts') AND ($flipped_path[1] != 'elements')){
 
 			// Look for a partial block
-			if(preg_match( "/<(partial) name=\"([a-zA-Z 0-9]+)\">(.*)<\/\\1>/", $content, $matches )){
+			$pattern = "/<(partial) name=\"([a-zA-Z 0-9]+)\">(.*)<\/\\1>/msU";
+			if(preg_match_all( $pattern, $content, $matches )){
 				
-				$content = str_replace($matches[0], "", $content);
+				$content = preg_replace($pattern, '', $content);
 
-				// assign to context
-				$this->_context['Partials']['blocks'][$matches[2]] = $matches[3];
+				foreach($matches[2] as $index => $name){
+					$blocks += array($name => $matches[3][$index]);
+				}
+
 
 			}
 
-			$this->content($content);
+		//	$this->content($content);
 
 		}
 
-		return $content;
+		// assign to context
+		$this->_strings['Partials']['blocks'] = $blocks;
+
+	//	return $content;
+
 	}
 
 }
