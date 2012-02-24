@@ -31,17 +31,13 @@ class Partial extends \lithium\template\Helper {
 		
 		$_strings['Partials']['strings'] = $this->_partials;
 
-		if(!empty($args)){
+		if(!empty($args) AND is_string($args[0])){
 
-			if(is_string($args[0]) OR is_bool($args[0])){
+			self::_setString($method, $args[0]);
 
-				self::_setString($method, $args[0]);
+			$_strings['Partials']['strings'] += $this->_partials;
 
-				$_strings['Partials']['strings'] += $this->_partials;
-
-				$this->_context->strings($_strings);
-
-			}
+			$this->_context->strings($_strings);
 
 		} else {
 
