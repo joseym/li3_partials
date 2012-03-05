@@ -19,6 +19,8 @@ class Parser extends \lithium\template\view\adapter\File {
 
 	protected $_blocks = array();
 
+	protected static $_viewContent;
+
 	/**
 	 * Parses the template for block partials and adds them to the core `_strings` array.
 	 * Everything contained within the `<partial />` tag will be added to the context
@@ -49,17 +51,18 @@ class Parser extends \lithium\template\view\adapter\File {
 		} elseif ($this->_view) {
 			extract((array) $this->_view->outputFilters, EXTR_OVERWRITE);
 		}
-
+		
 		ob_start();
 		include $template__;
 		$content = ob_get_clean();
-		
+
 		// Exclude layouts and elements for now
 		// we will only look for partial blocks from views
-		if(($flipped_path[1] != 'layouts') AND ($flipped_path[1] != 'elements')){
+		if(!preg_match('/layouts/', $flipped_path[0]) AND !preg_match('/elements/', $flipped_path[0])){
 
 			// Look for a partial block
 			$pattern = "/<(partial) name=\"([a-zA-Z 0-9]+)\">(.*)<\/\\1>/msU";
+
 			if(preg_match_all( $pattern, $content, $matches )){
 				
 				$content = preg_replace($pattern, '', $content);
@@ -68,7 +71,7 @@ class Parser extends \lithium\template\view\adapter\File {
 					$this->_blocks += array($name => $matches[3][$index]);
 				}
 
-
+	
 			}
 
 			$this->content($content);
@@ -77,7 +80,7 @@ class Parser extends \lithium\template\view\adapter\File {
 
 		// assign to context
 		$this->_strings['Partials']['blocks'] = $this->_blocks;
-
+				
 		return $content;
 
 	}
