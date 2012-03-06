@@ -51,11 +51,13 @@ class Parser extends \lithium\template\view\adapter\File {
 		} elseif ($this->_view) {
 			extract((array) $this->_view->outputFilters, EXTR_OVERWRITE);
 		}
-		
+
 		ob_start();
 		include $template__;
 		$content = ob_get_clean();
-
+		echo "<pre>";
+		print_r($flipped_path[0]);
+		echo "</pre>";
 		// Exclude layouts and elements for now
 		// we will only look for partial blocks from views
 		if(!preg_match('/layouts/', $flipped_path[0]) AND !preg_match('/elements/', $flipped_path[0])){
