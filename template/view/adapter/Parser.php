@@ -44,6 +44,10 @@ class Parser extends \lithium\template\view\adapter\File {
 		$this->_data = (array) $data + $this->_vars;
 		$template__ = (is_array($template)) ? $template[0] : $template;
 		$flipped_path = array_reverse(explode("/", $template__));
+
+		$isLayout = (preg_match('/layouts/', $flipped_path[0]) OR $flipped_path[1] == 'layouts') ? true : false;
+		$isElement = (preg_match('/elements/', $flipped_path[0]) OR $flipped_path[1] == 'elements') ? true : false;
+
 		unset($options, $template, $defaults, $data);
 
 		if ($this->_config['extract']) {
@@ -55,12 +59,9 @@ class Parser extends \lithium\template\view\adapter\File {
 		ob_start();
 		include $template__;
 		$content = ob_get_clean();
-		echo "<pre>";
-		print_r($flipped_path[0]);
-		echo "</pre>";
-		// Exclude layouts and elements for now
+
 		// we will only look for partial blocks from views
-		if(!preg_match('/layouts/', $flipped_path[0]) AND !preg_match('/elements/', $flipped_path[0])){
+		if(!$isLayout AND !$isElement){
 
 			// Look for a partial block
 			$pattern = "/<(partial) name=\"([a-zA-Z 0-9]+)\">(.*)<\/\\1>/msU";
