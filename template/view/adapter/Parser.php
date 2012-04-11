@@ -34,10 +34,6 @@ class Parser extends \lithium\template\view\adapter\File {
 	 */
 	public function render($template, $data = array(), array $options = array()) {
 
-		echo "<pre>";
-		print_r($this->_strings['Partials']['blocks']);
-		echo "</pre>";
-
 		$defaults = array('context' => array());
 		$options += $defaults;
 		$this->_context += $options['context'];
@@ -75,14 +71,14 @@ class Parser extends \lithium\template\view\adapter\File {
 
 			}
 
-		//	$this->content($content);
+			$this->content($content);
 
 		}
 
 		// assign to context
 		$this->_strings['Partials']['blocks'] = $blocks;
 
-	//	return $content;
+		return $content;
 
 	}
 
