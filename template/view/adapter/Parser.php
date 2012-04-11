@@ -17,9 +17,12 @@ use lithium\template\TemplateException;
 // class Parser extends \lithium\template\view\Renderer {
 class Parser extends \lithium\template\view\adapter\File {
 
+	protected $_blocks = array();
+
+	protected static $_viewContent;
 
 	/**
-	 * Parses the template for block partials and adds them to the core _context array.
+	 * Parses the template for block partials and adds them to the core `_strings` array.
 	 * Everything contained within the `<partial />` tag will be added to the context
 	 * 
 	 * {{{
@@ -37,9 +40,14 @@ class Parser extends \lithium\template\view\adapter\File {
 		$defaults = array('context' => array());
 		$options += $defaults;
 		$this->_context += $options['context'];
+
 		$this->_data = (array) $data + $this->_vars;
 		$template__ = (is_array($template)) ? $template[0] : $template;
 		$flipped_path = array_reverse(explode("/", $template__));
+
+		$isLayout = (preg_match('/layouts/', $flipped_path[0]) OR $flipped_path[1] == 'layouts') ? true : false;
+		$isElement = (preg_match('/elements/', $flipped_path[0]) OR $flipped_path[1] == 'elements') ? true : false;
+
 		unset($options, $template, $defaults, $data);
 
 		if ($this->_config['extract']) {
@@ -51,24 +59,22 @@ class Parser extends \lithium\template\view\adapter\File {
 		ob_start();
 		include $template__;
 		$content = ob_get_clean();
-		
-		$blocks = array();
 
-		// Exclude layouts and elements for now
 		// we will only look for partial blocks from views
-		if(($flipped_path[1] != 'layouts') AND ($flipped_path[1] != 'elements')){
+		if(!$isLayout AND !$isElement){
 
 			// Look for a partial block
 			$pattern = "/<(partial) name=\"([a-zA-Z 0-9]+)\">(.*)<\/\\1>/msU";
+
 			if(preg_match_all( $pattern, $content, $matches )){
 				
 				$content = preg_replace($pattern, '', $content);
 
 				foreach($matches[2] as $index => $name){
-					$blocks += array($name => $matches[3][$index]);
+					$this->_blocks += array($name => $matches[3][$index]);
 				}
 
-
+	
 			}
 
 			$this->content($content);
@@ -76,8 +82,8 @@ class Parser extends \lithium\template\view\adapter\File {
 		}
 
 		// assign to context
-		$this->_strings['Partials']['blocks'] = $blocks;
-
+		$this->_strings['Partials']['blocks'] = $this->_blocks;
+				
 		return $content;
 
 	}
