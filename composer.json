@@ -1,0 +1,20 @@
+{
+    "name": "joseym/li3_partials",
+    "description": "The partial plugin for Lithium(li3) provides flexibility to pass template sections from view to the layout.",
+    "type": "lithium-library",
+    "version": "dev-master",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "joseym",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "composer/installers": "*"
+    },
+    "suggest": {
+        "UnionOfRAD/lithium": "Lithium is required for this plugin."
+    },
+    "minimum-stability": "dev"
+}
